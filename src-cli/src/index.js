@@ -1,6 +1,7 @@
 const { Command } = require('commander');
 const setupCommand = require('./commands/setup');
 const devCommand = require('./commands/dev');
+const configCommand = require('./commands/config');
 
 const program = new Command();
 
@@ -18,5 +19,10 @@ program
   .command('dev')
   .description('Start the local live-reload development server')
   .action(devCommand);
+
+program
+  .command('config')
+  .description('Configure the CLI settings (e.g., Google Drive sync folder)')
+  .action(configCommand);
 
 program.parse();
