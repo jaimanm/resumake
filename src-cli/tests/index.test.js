@@ -5,7 +5,6 @@ const execa = require('execa');
 const chokidar = require('chokidar');
 const fs = require('fs');
 
-// Tell Jest to "mock" these external libraries
 jest.mock('inquirer');
 jest.mock('execa');
 jest.mock('chokidar');
@@ -36,6 +35,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({ stdout: 'rclone v1' });
 
       inquirer.prompt.mockResolvedValueOnce({
+        targetDir: '..',
         repoName: 'my-test-resume',
         template: 'modular-multi',
         driveFolder: 'MyResumes'
@@ -48,7 +48,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git fetch
       execa.mockResolvedValueOnce({}); // git reset
       
-      fs.existsSync.mockReturnValueOnce(true);
+      fs.existsSync.mockImplementation((pathStr) => pathStr.includes('build-resume.yml') ? true : false);
       fs.readFileSync.mockReturnValueOnce('... rclone sync PDF_Exports/ gdrive:Resumes/ ...');
       
       execa.mockResolvedValueOnce({}); // git checkout template/main
@@ -82,6 +82,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({ stdout: 'rclone v1' });
 
       inquirer.prompt.mockResolvedValueOnce({
+        targetDir: '..',
         repoName: 'my-test-resume',
         template: 'modular-multi',
         driveFolder: 'Resumes'
@@ -93,7 +94,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git remote add
       execa.mockResolvedValueOnce({}); // git fetch
       execa.mockResolvedValueOnce({}); // git reset
-      fs.existsSync.mockReturnValueOnce(false);
+      fs.existsSync.mockReturnValue(false);
       execa.mockResolvedValueOnce({}); // git checkout template/main
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
@@ -117,9 +118,10 @@ describe('CLI Commands', () => {
 
       execa.mockResolvedValueOnce({}); // brew install git gh rclone
 
-      inquirer.prompt.mockResolvedValueOnce({ repoName: 'test', template: 'standard', driveFolder: 'Resumes' });
-      execa.mockResolvedValue({ stdout: 'fake-url' }); // Catch-all for remaining execa calls
-      fs.existsSync.mockReturnValue(false); // don't mock the file replacement
+      inquirer.prompt.mockResolvedValueOnce({ targetDir: '..', repoName: 'test', template: 'standard', driveFolder: 'Resumes' });
+      
+      execa.mockResolvedValue({ stdout: 'fake-url' }); // Default for all remaining calls
+      fs.existsSync.mockReturnValue(false);
       inquirer.prompt.mockResolvedValueOnce({ ready: false }); // Skip drive auth
 
       await setupCommand();
@@ -143,7 +145,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({ stdout: 'gh version' });
       execa.mockResolvedValueOnce({ stdout: 'rclone v1' });
 
-      inquirer.prompt.mockResolvedValueOnce({ repoName: 'test', template: 'standard', driveFolder: 'Resumes' });
+      inquirer.prompt.mockResolvedValueOnce({ targetDir: '..', repoName: 'test', template: 'standard', driveFolder: 'Resumes' });
 
       // Fail GitHub auth
       execa.mockRejectedValueOnce(new Error('auth failed'));
