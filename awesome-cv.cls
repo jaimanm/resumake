@@ -81,29 +81,32 @@
 \defaultfontfeatures{
   Renderer=HarfBuzz,
 }
-\setmainfont{Source Sans 3}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+\setmainfont{SourceSansPro}[
+  Extension = .otf,
+  UprightFont = *-Regular,
+  ItalicFont = *-RegularIt,
+  BoldFont = *-Bold,
+  BoldItalicFont = *-BoldIt,
+  FontFace={l}{n}{Font=*-Light},
+  FontFace={l}{it}{Font=*-LightIt},
 ]
-\setsansfont{Source Sans 3}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+\setsansfont{SourceSansPro}[
+  Extension = .otf,
+  UprightFont = *-Regular,
+  ItalicFont = *-RegularIt,
+  BoldFont = *-Bold,
+  BoldItalicFont = *-BoldIt,
+  FontFace={l}{n}{Font=*-Light},
+  FontFace={l}{it}{Font=*-LightIt},
 ]
 \newfontfamily\roboto{Roboto}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+  Extension = .otf,
+  UprightFont = *-Regular,
+  ItalicFont = *-Italic,
+  BoldFont = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  FontFace={l}{n}{Font=*-Light},
+  FontFace={l}{it}{Font=*-LightItalic},
 ]
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
