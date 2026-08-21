@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const execa = require('execa');
 const ora = require('ora');
 const chalk = require('chalk');
+const fs = require('fs');
 
 async function checkDependencies() {
   const missing = [];
@@ -56,24 +57,47 @@ module.exports = async function setupCommand() {
         { name: 'Awesome-CV (Professional)', value: 'awesome-cv' },
         { name: "Jake's Resume (Classic)", value: 'jakes-resume' }
       ]
+    },
+    {
+      type: 'input',
+      name: 'driveFolder',
+      message: 'What folder in Google Drive should your PDFs sync to?',
+      default: 'Resumes'
     }
   ]);
 
-  const { repoName, template } = answers;
+  const { repoName, template, driveFolder } = answers;
 
   console.log(chalk.green(`\nAwesome! Setting up ${repoName} using the ${template} template...\n`));
   
   const scaffoldSpinner = ora('Creating GitHub repository and pulling template...').start();
+  let remoteUrl;
   try {
     await execa('gh', ['auth', 'status']);
     await execa('gh', ['repo', 'create', repoName, '--private', '--clone']);
     process.chdir(repoName);
+    
+    // Get the exact origin URL for future gh CLI calls (fixes multiple remotes bug)
+    const urlResult = await execa('git', ['config', '--get', 'remote.origin.url']);
+    remoteUrl = urlResult.stdout.trim();
+
     await execa('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/auto-resume-template.git']);
     await execa('git', ['fetch', 'template']);
     await execa('git', ['reset', '--hard', `template/template/${template}`]);
+    
+    // Customize the GitHub action with the user's preferred Google Drive folder
+    const actionPath = '.github/workflows/build-resume.yml';
+    if (fs.existsSync(actionPath)) {
+        let actionContent = fs.readFileSync(actionPath, 'utf8');
+        actionContent = actionContent.replace(/gdrive:Resumes\//g, `gdrive:${driveFolder}/`);
+        fs.writeFileSync(actionPath, actionContent);
+    }
+
     // Pull the CLI wrapper back in from the main branch so they can use ./cli dev!
     await execa('git', ['checkout', 'template/main', '--', 'cli', 'src-cli']);
-    await execa('git', ['commit', '-m', `Scaffold ${template} with CLI tools`]);
+    
+    await execa('git', ['add', '.']);
+    await execa('git', ['commit', '-m', `Scaffold ${template} with CLI tools and custom Drive folder`]);
     await execa('git', ['push', '-u', 'origin', 'main', '--force']);
     scaffoldSpinner.succeed(`Successfully created ${repoName} and scaffolded template!`);
   } catch (err) {
@@ -109,11 +133,13 @@ module.exports = async function setupCommand() {
       const rcloneConfContent = `[gdrive]\ntype = drive\nscope = drive\ntoken = ${tokenJson}`;
       
       driveSpinner.text = 'Uploading token securely to GitHub Secrets...';
-      await execa('gh', ['secret', 'set', 'RCLONE_CONF', '--body', rcloneConfContent]);
+      await execa('gh', ['secret', 'set', 'RCLONE_CONF', '--body', rcloneConfContent, '-R', remoteUrl]);
       driveSpinner.succeed('Google Drive token successfully secured in GitHub Secrets!');
     } catch (err) {
       driveSpinner.fail('Failed to setup Google Drive sync.');
       console.error(chalk.red(err.message));
+      console.log(chalk.yellow('\nPlease try running the setup again, or open an issue on the repository if the problem persists.'));
+      process.exit(1);
     }
   }
 
