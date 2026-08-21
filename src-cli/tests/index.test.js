@@ -174,7 +174,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // simulate build_all.sh succeeding
       await changeCallback('resume.tex');
 
-      expect(execa).toHaveBeenCalledWith('./build_all.sh', [], { stdio: 'inherit' });
+      expect(execa).toHaveBeenCalledWith('./build_all.sh');
     });
   });
 });
