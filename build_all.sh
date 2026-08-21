@@ -1,23 +1,17 @@
 #!/bin/bash
 
-# Create identifying output directories
-mkdir -p PDF_Exports/Backend
-mkdir -p PDF_Exports/AIML
-mkdir -p PDF_Exports/Quantum
+mkdir -p PDF_Exports
 
-echo "Building Backend Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/Backend" resume_backend.tex
+echo "Building Resume..."
+latexmk -xelatex -jobname="Awesome_CV_Resume" -output-directory="PDF_Exports" resume.tex
 
-echo "Building AI/ML Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/AIML" resume_aiml.tex
+echo "Building CV..."
+latexmk -xelatex -jobname="Awesome_CV_Full" -output-directory="PDF_Exports" cv.tex
 
-echo "Building Quantum Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/Quantum" resume_quantum.tex
+echo "Building Cover Letter..."
+latexmk -xelatex -jobname="Awesome_CV_CoverLetter" -output-directory="PDF_Exports" coverletter.tex
 
-# Clean up all LaTeX auxiliary files, leaving ONLY the PDFs in the export directories
+# Clean up auxiliary build files
 find PDF_Exports -type f ! -name "*.pdf" -delete
 
-echo "Done! Your beautifully named PDFs are organized in the PDF_Exports directory."
-
-# Clean up auxiliary build folders to keep the workspace clean
-rm -rf resume_*_build
+echo "Done! Your PDFs are organized in the PDF_Exports directory."

@@ -19,7 +19,7 @@ jobs:
       - name: Install LaTeX environment (Cached)
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science latexmk
+          packages: texlive-xetex texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science latexmk
           version: 1.0
 
       - name: Build Official PDFs
