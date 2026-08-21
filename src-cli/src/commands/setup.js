@@ -40,12 +40,32 @@ module.exports = async function setupCommand() {
   
   await checkDependencies();
 
+  const path = require('path');
   const answers = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'targetDir',
+      message: 'Where would you like to clone your new resume repository locally?',
+      default: '..'
+    },
     {
       type: 'input',
       name: 'repoName',
       message: 'What would you like to name your new private repository?',
-      default: 'my-resume'
+      default: 'my-resume',
+      validate: async (input, answers) => {
+        if (!input) return 'Repository name cannot be empty.';
+        const targetPath = path.resolve(answers.targetDir, input);
+        if (fs.existsSync(targetPath)) {
+            return `A folder named "${input}" already exists at ${targetPath}. Please choose a different name or directory.`;
+        }
+        try {
+            await execa('gh', ['repo', 'view', input]);
+            return `Repository "${input}" already exists on your GitHub account. Please choose a different name.`;
+        } catch {
+            return true;
+        }
+      }
     },
     {
       type: 'list',
@@ -66,7 +86,7 @@ module.exports = async function setupCommand() {
     }
   ]);
 
-  const { repoName, template, driveFolder } = answers;
+  const { repoName, template, driveFolder, targetDir } = answers;
 
   console.log(chalk.green(`\nAwesome! Setting up ${repoName} using the ${template} template...\n`));
   
@@ -74,6 +94,12 @@ module.exports = async function setupCommand() {
   let remoteUrl;
   try {
     await execa('gh', ['auth', 'status']);
+    // Change to target directory before cloning
+    const path = require('path');
+    const absoluteTargetDir = path.resolve(targetDir);
+    if (!fs.existsSync(absoluteTargetDir)) fs.mkdirSync(absoluteTargetDir, { recursive: true });
+    process.chdir(absoluteTargetDir);
+
     await execa('gh', ['repo', 'create', repoName, '--private', '--clone']);
     process.chdir(repoName);
     
@@ -145,7 +171,7 @@ module.exports = async function setupCommand() {
 
   console.log(chalk.green(`\n🎉 All done! Your magical resume environment is ready.`));
   console.log(chalk.white(`\nNext steps:`));
-  console.log(chalk.cyan(`  cd ${repoName}`));
+  console.log(chalk.cyan(`  cd ${path.join(targetDir, repoName)}`));
   console.log(chalk.cyan(`  ./cli dev`));
   console.log(chalk.white(`\nTo live-edit your resume!\n`));
 };
