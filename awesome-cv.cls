@@ -547,7 +547,7 @@
       \ifthenelse{\isundefined{\@mobile}}%
         {}%
         {%
-          \href{\@teluri}{\faAlt{tel:\@mobile}{\faMobileAlt}{\@mobile}}%
+          \href{\@teluri}{\faAlt{tel:\@mobile}{\faMobile}{\@mobile}}%
           \setbool{isstart}{false}%
         }%
       \ifthenelse{\isundefined{\@whatsapp}}%
