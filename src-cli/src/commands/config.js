@@ -49,6 +49,7 @@ module.exports = async function configCommand() {
 
       spinner.start('Updating configuration and syncing to GitHub...');
       actionContent = actionContent.replace(new RegExp(`gdrive:${currentDriveFolder}\/`, 'g'), `gdrive:${driveFolder}/`);
+      actionContent = actionContent.replace(new RegExp(`Google Drive '${currentDriveFolder}' folder`, 'g'), `Google Drive '${driveFolder}' folder`);
       fs.writeFileSync(actionPath, actionContent);
       
       await execa('git', ['add', actionPath]);
