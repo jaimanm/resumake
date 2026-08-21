@@ -52,7 +52,8 @@ module.exports = async function setupCommand() {
       message: 'Which resume template would you like to use?',
       choices: [
         { name: 'Modular Multi-Resume (3 versions)', value: 'modular-multi' },
-        { name: 'Standard (Single version)', value: 'standard' }
+        { name: 'Standard (Single version)', value: 'standard' },
+        { name: 'Awesome-CV (Professional)', value: 'awesome-cv' }
       ]
     }
   ]);
