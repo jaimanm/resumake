@@ -46,6 +46,8 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git remote add
       execa.mockResolvedValueOnce({}); // git fetch
       execa.mockResolvedValueOnce({}); // git reset
+      execa.mockResolvedValueOnce({}); // git checkout
+      execa.mockResolvedValueOnce({}); // git commit
       execa.mockResolvedValueOnce({}); // git push
 
       inquirer.prompt.mockResolvedValueOnce({ ready: true });

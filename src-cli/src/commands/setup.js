@@ -71,7 +71,10 @@ module.exports = async function setupCommand() {
     await execa('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/auto-resume-template.git']);
     await execa('git', ['fetch', 'template']);
     await execa('git', ['reset', '--hard', `template/template/${template}`]);
-    await execa('git', ['push', '-u', 'origin', 'main']);
+    // Pull the CLI wrapper back in from the main branch so they can use ./cli dev!
+    await execa('git', ['checkout', 'template/main', '--', 'cli', 'src-cli']);
+    await execa('git', ['commit', '-m', `Scaffold ${template} with CLI tools`]);
+    await execa('git', ['push', '-u', 'origin', 'main', '--force']);
     scaffoldSpinner.succeed(`Successfully created ${repoName} and scaffolded template!`);
   } catch (err) {
     scaffoldSpinner.fail('Failed to scaffold repository.');
