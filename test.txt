@@ -1,0 +1,80 @@
+                                         Jaiman Munshi
+                         jaimanmunshi@gmail.com | linkedin.com/in/jaimanmunshi | jaimanm.github.io
+
+Education
+ University of Maryland                                                                                        College Park, MD
+ B.S. in Computer Science - Machine Learning | GPA: 3.94                                                   Graduation: May 2027
+    • Minors: Quantum Science & Engineering, Statistics
+
+    • Relevant Coursework: Quantum Computing, Artificial Intelligence, Algorithms, Data Structures, Computer Systems,
+
+      Data Science
+ IBM Certified V2.X Qiskit Developer - Associate
+    • Proficient in Qiskit patterns, Sampler/Estimator primitives, error correction & mitigation techniques, and optimized
+
+      hardware transpilation
+
+Experience
+ Bank of America
+ Software Engineering Intern                                                                              Jun 2026 – Aug 2026
+    • Architected the migration of a legacy enterprise fund database application to a modern React and Spring Boot stack,
+
+      developing REST APIs and integrating Ping OIDC for secure authentication.
+    • Optimized backend SQL to improve response time by 3x, wrote comprehensive unit tests for both frontend and backend, and
+
+      accelerated feature delivery using custom Github Copilot workflows and MCP servers.
+    • Engineered a custom AI agent integrated with database and spreadsheet tools to automate manual dividend processing,
+
+      delivering a conversational chat interface to operations and support teams.
+ Axcellion.ai
+ Software Engineer                                                                                           Jan 2026 – May 2026
+    • Architected a multithreaded ingestion pipeline to process over 108,000 regulatory filings totaling 80+ GB at 9.1 docs/sec with
+
+      0 failures, utilizing AWS EC2 to bypass remote server rate-limits and maximize bandwidth during high-speed bulk transfers.
+    • Engineered a RAG intelligence engine mapping over 100k nodes and relationships in a Neo4j knowledge graph, by utilizing
+
+      AWS Lambda and EventBridge to automate daily data source synchronization.
+ IonQ
+ Project Lead                                                                                                Aug 2025 – Present
+    • Managing SLURM-scheduled parallelization on the Zaratan HPC cluster, optimizing data loading routines to reduce epoch
+
+      training cycles from 72 hours to 10 minutes.
+    • Directing a 12-engineer team to scale distributed computing workflows into a published arXiv paper, establishing
+
+      standardized code review, Agile workflows, and documentation protocols.
+ National Quantum Laboratory
+ Quantum Computing Research Intern                                                                         Jul 2025 – Aug 2025
+   • Established the foundational architecture for the QFireNet wildfire segmentation model, executing the first GPU-accelerated
+
+     training cycles to validate the feasibility of a hybrid quantum approach to wildfire detection.
+   • Achieved >99% accuracy on MNIST using a hybrid quantum approach matching published benchmarks, and validated the
+
+     hand-built model on both IonQ quantum processors and the Pennylane Lightning simulator.
+ General Dynamics IT
+ Backend Engineer                                                                                         Feb 2025 – May 2025
+   • Built an agentic RAG pipeline processing a dataset of 500,000 emails between 150 accounts, developing Qdrant embeddings
+
+      and a Neo4j knowledge graph to enable Ai-powered insights and summaries in under 6 seconds per query.
+   • Developed an end-to-end React and Flask full-stack application to deliver real-time summarization of the Enron corpus,
+
+      handling large-scale unstructured email data through custom parsing and preprocessing techniques.
+
+Projects
+ QFireNet: Quantum-Enhanced Wildfire Segmentation | PyTorch, PennyLane, Jupyter                              Aug 2025 – Present
+   • Published a hybrid quantum-classical U-Net model for multispectral satellite wildfire detection, replacing the classical
+
+     bottleneck with QuFeX and QB-Net variational quantum circuits to improve feature extraction in the Sen2Fire dataset.
+   • Improved test F1 score by 11% over 16 experiments, using angle embedding to prevent NaN gradient collapse during training.
+
+
+
+ Trace | React, Next.js, Flask, Supabase, OpenCV, XGBoost
+   • Trained a custom XGBoost classifier on 1,056 samples to achieve 91% Parkinson’s severity classification accuracy across 5
+
+     motor skill metrics, integrating into a web patient monitoring platform processing tracing assessments in under 2 seconds.
+
+Technical Skills
+ Languages: Python, Java, C, Typescript, HTML/CSS, OCaml, C#, Assembly (x86-64), UML, SQL, SAS
+ ML & Quantum: PyTorch, Tensorflow, Pennylane, Qiskit, Scikit-learn, OpenCV, Pandas, NumPy, Matplotlib
+ Frameworks & Tools: React, Git, Jupyter, Spring Boot, Next.js, Flask, Sveltekit, Vitest, AWS, Neo4j, HPC, SQL Server, Oracle
+
