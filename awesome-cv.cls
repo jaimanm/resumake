@@ -547,14 +547,14 @@
       \ifthenelse{\isundefined{\@mobile}}%
         {}%
         {%
-          \href{\@teluri}{\faAlt{tel:\@mobile}{\faMobile}{\@mobile}}%
+          \href{\@teluri}{\faAlt{tel:\@mobile}{\faMobileAlt}{\@mobile}}%
           \setbool{isstart}{false}%
         }%
       \ifthenelse{\isundefined{\@whatsapp}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{\@wameuri}{\faAlt{WhatsApp: \@whatsapp}{\faSquareWhatsapp}{\@whatsapp}}%
+          \href{\@wameuri}{\faAlt{WhatsApp: \@whatsapp}{\faWhatsappSquare}{\@whatsapp}}%
         }%
       \ifthenelse{\isundefined{\@email}}%
         {}%
@@ -566,19 +566,19 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \faAlt{DoB: \@dateofbirth}{\faCakeCandles}{\@dateofbirth}%
+          \faAlt{DoB: \@dateofbirth}{\faBirthdayCake}{\@dateofbirth}%
         }%
       \ifthenelse{\isundefined{\@homepage}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{\@homepage}{\faAlt{homepage: \@homepage}{\faHouseChimney}{\@homepage}}%
+          \href{\@homepage}{\faAlt{homepage: \@homepage}{\faHome}{\@homepage}}%
         }%
       \ifthenelse{\isundefined{\@github}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://github.com/\@github}{\faAlt{GitHub: @\@github}{\faSquareGithub}{\@github}}%
+          \href{https://github.com/\@github}{\faAlt{GitHub: @\@github}{\faGithubSquare}{\@github}}%
         }%
       \ifthenelse{\isundefined{\@gitlab}}%
         {}%
@@ -620,7 +620,7 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://x.com/\@x}{\faAlt{X: @\@x}{\faXTwitter}{\@x}}%
+          \href{https://x.com/\@x}{\faAlt{X: @\@x}{\faTwitter}{\@x}}%
         }%
       \ifthenelse{\isundefined{\@mastodonname}}%
         {}%
@@ -650,7 +650,7 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://www.xing.com/profile/\@xing}{\faAlt{Xing: \@xing}{\faSquareXing}{\@xing}}
+          \href{https://www.xing.com/profile/\@xing}{\faAlt{Xing: \@xing}{\faXingSquare}{\@xing}}
         }%
       \ifthenelse{\isundefined{\@medium}}%
         {}%
