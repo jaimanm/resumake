@@ -54,7 +54,6 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git checkout template/main
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
-      execa.mockResolvedValueOnce({}); // git push
 
       inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
@@ -65,6 +64,7 @@ describe('CLI Commands', () => {
       });
 
       execa.mockResolvedValueOnce({}); // gh secret set
+      execa.mockResolvedValueOnce({}); // git push
 
       await setupCommand();
 
@@ -76,7 +76,7 @@ describe('CLI Commands', () => {
       expect(exitMock).not.toHaveBeenCalled();
     });
 
-    it('Error Path: Exits cleanly if Google Drive sync fails', async () => {
+    it('Error Path: Logs warning but continues to push if Google Drive sync fails', async () => {
       execa.mockResolvedValueOnce({ stdout: 'git version' });
       execa.mockResolvedValueOnce({ stdout: 'gh version' });
       execa.mockResolvedValueOnce({ stdout: 'rclone v1' });
@@ -98,15 +98,16 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git checkout template/main
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
-      execa.mockResolvedValueOnce({}); // git push
 
       inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
       // Simulate rclone failure
       execa.mockRejectedValueOnce(new Error('rclone crashed'));
+      
+      execa.mockResolvedValueOnce({}); // git push
 
-      await expect(setupCommand()).rejects.toThrow('process.exit(1) called');
-      expect(exitMock).toHaveBeenCalledWith(1);
+      await setupCommand();
+      expect(exitMock).not.toHaveBeenCalled();
     });
 
     it('Error Path: Triggers Homebrew installer if dependencies are missing', async () => {

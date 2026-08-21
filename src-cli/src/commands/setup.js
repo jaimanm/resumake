@@ -124,7 +124,6 @@ module.exports = async function setupCommand() {
     
     await execa('git', ['add', '.']);
     await execa('git', ['commit', '-m', `Scaffold ${template} with CLI tools and custom Drive folder`]);
-    await execa('git', ['push', '-u', 'origin', 'main', '--force']);
     scaffoldSpinner.succeed(`Successfully created ${repoName} and scaffolded template!`);
   } catch (err) {
     scaffoldSpinner.fail('Failed to scaffold repository.');
@@ -165,8 +164,16 @@ module.exports = async function setupCommand() {
       driveSpinner.fail('Failed to setup Google Drive sync.');
       console.error(chalk.red(err.message));
       console.log(chalk.yellow('\nPlease try running the setup again, or open an issue on the repository if the problem persists.'));
-      process.exit(1);
     }
+  }
+
+  const pushSpinner = ora('Pushing initial commit to trigger GitHub Action...').start();
+  try {
+    await execa('git', ['push', '-u', 'origin', 'main', '--force']);
+    pushSpinner.succeed('Initial commit pushed! GitHub Actions is now building and syncing your resume.');
+  } catch (err) {
+    pushSpinner.fail('Failed to push to GitHub.');
+    console.error(chalk.red(err.message));
   }
 
   console.log(chalk.green(`\n🎉 All done! Your magical resume environment is ready.`));
