@@ -15,11 +15,12 @@ module.exports = async function devCommand() {
     .on('change', async path => {
       console.log(chalk.yellow(`\nFile ${path} has been changed. Rebuilding...`));
       try {
-        await execa('./build_all.sh', [], { stdio: 'inherit' });
+        await execa('./build_all.sh');
         console.log(chalk.green('Build successful!'));
       } catch (error) {
-        console.log(chalk.red('Build failed!'));
-        console.error(error.message);
+        console.log(chalk.red('Build failed! See build.log for details.'));
+        const fs = require('fs');
+        fs.writeFileSync('build.log', (error.stdout || '') + '\n' + (error.stderr || ''));
       }
     });
 };
