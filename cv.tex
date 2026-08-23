@@ -115,6 +115,7 @@
 \newtoggle{education}
 \newtoggle{skills}
 \newtoggle{experience}
+\newtoggle{projects}
 \newtoggle{extracurricular}
 \newtoggle{honors}
 \newtoggle{certificates}
@@ -125,6 +126,7 @@
 \toggletrue{education}
 \toggletrue{skills}
 \toggletrue{experience}
+\toggletrue{projects}
 \toggletrue{extracurricular}
 \toggletrue{honors}
 \toggletrue{certificates}
@@ -159,6 +161,7 @@
 \iftoggle{education}{\input{cv/education.tex}}{}
 \iftoggle{skills}{\input{cv/skills.tex}}{}
 \iftoggle{experience}{\input{cv/experience.tex}}{}
+\iftoggle{projects}{\input{cv/projects.tex}}{}
 \iftoggle{extracurricular}{\input{cv/extracurricular.tex}}{}
 \iftoggle{honors}{\input{cv/honors.tex}}{}
 \iftoggle{certificates}{\input{cv/certificates.tex}}{}
