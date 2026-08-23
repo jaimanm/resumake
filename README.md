@@ -5,7 +5,7 @@
 A magical, fully-automated LaTeX resume workflow. Write your resume in LaTeX, and automatically compile it, release it, and sync it to Google Drive every time you push.
 
 ## Why ResuMake?
-The core philosophy behind ResuMake is to treat your resume like a professional software engineering project:
+The project is heavily inspired by automated CI/CD pipelines, bringing those same principles to your personal resume. The core philosophy behind ResuMake is to treat your resume like a professional software engineering project:
 1. **Local Live-Editing:** Use `resumake dev` to instantly see your PDF update as you make local LaTeX code changes.
 2. **Version Control for Code:** Push your changes to GitHub to maintain a perfect, branched version history of the raw LaTeX code.
 3. **Version Control for PDFs:** GitHub Actions automatically compiles and creates historical GitHub Releases, giving you version control for the actual compiled PDFs.
