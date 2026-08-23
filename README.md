@@ -1,5 +1,7 @@
 # ResuMake
 
+[![npm version](https://img.shields.io/npm/v/@jaimanm/resumake.svg)](https://www.npmjs.com/package/@jaimanm/resumake)
+
 A magical, fully-automated LaTeX resume workflow. Write your resume in LaTeX, and automatically compile it, release it, and sync it to Google Drive every time you push.
 
 ## Why ResuMake?
