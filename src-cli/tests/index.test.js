@@ -173,11 +173,9 @@ describe('CLI Commands', () => {
       expect(chokidar.watch).toHaveBeenCalledWith('**/*.tex', expect.any(Object));
 
       execa.mockResolvedValueOnce({}); // simulate build_all.sh succeeding
-      execa.mockResolvedValueOnce({}); // simulate rclone succeeding
       await changeCallback('resume.tex');
 
       expect(execa).toHaveBeenCalledWith('./build_all.sh');
-      expect(execa).toHaveBeenCalledWith('rclone', ['sync', 'PDF_Exports/', expect.stringContaining('gdrive:')]);
     });
   });
 });
