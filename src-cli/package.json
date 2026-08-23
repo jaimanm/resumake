@@ -1,5 +1,5 @@
 {
-  "name": "create-resume-env",
+  "name": "resumake",
   "version": "1.0.0",
   "description": "CLI to scaffold a magical LaTeX resume environment",
   "main": "index.js",

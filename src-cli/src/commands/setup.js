@@ -36,7 +36,7 @@ async function checkDependencies() {
 }
 
 module.exports = async function setupCommand() {
-  console.log(chalk.cyan('\n🚀 Welcome to the Auto-Resume Setup Wizard!\n'));
+  console.log(chalk.cyan('\n🚀 Welcome to the ResuMake Setup Wizard!\n'));
   
   await checkDependencies();
 
@@ -107,7 +107,7 @@ module.exports = async function setupCommand() {
     const urlResult = await execa('git', ['config', '--get', 'remote.origin.url']);
     remoteUrl = urlResult.stdout.trim();
 
-    await execa('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/auto-resume-template.git']);
+    await execa('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/resumake.git']);
     await execa('git', ['fetch', 'template']);
     await execa('git', ['reset', '--hard', `template/template/${template}`]);
     
