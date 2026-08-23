@@ -4,7 +4,7 @@ A magical, fully-automated LaTeX resume workflow. Write your resume in LaTeX, an
 
 ## Why ResuMake?
 The core philosophy behind ResuMake is to treat your resume like a professional software engineering project:
-1. **Local Live-Editing:** Use `./cli dev` to instantly see your PDF update as you make local LaTeX code changes.
+1. **Local Live-Editing:** Use `resumake dev` to instantly see your PDF update as you make local LaTeX code changes.
 2. **Version Control for Code:** Push your changes to GitHub to maintain a perfect, branched version history of the raw LaTeX code.
 3. **Version Control for PDFs:** GitHub Actions automatically compiles and creates historical GitHub Releases, giving you version control for the actual compiled PDFs.
 4. **Frictionless "Production" Access:** The CI/CD pipeline syncs the compiled releases directly to your Google Drive Desktop. You always have immediate, one-click access to your most up-to-date "production" PDF when applying for jobs, without manually downloading or moving files.
@@ -17,20 +17,19 @@ The core philosophy behind ResuMake is to treat your resume like a professional 
 
 ## Getting Started
 
-1. Clone this repository to bootstrap your environment:
+1. Install the CLI globally via NPM:
    ```bash
-   git clone https://github.com/jaimanm/resumake.git
-   cd resumake
+   npm install -g @jaimanm/resumake
    ```
-2. Run the interactive setup wizard:
+2. Run the interactive setup wizard anywhere on your machine:
    ```bash
-   ./cli setup
+   resumake setup
    ```
 3. Follow the CLI instructions to authenticate with Google Drive, pick a template, and it will scaffold your new private resume repository!
 
 ## Local Development
 After setup, navigate to your **newly created private repository** and run:
 ```bash
-./cli dev
+resumake dev
 ```
 This will start a watcher that instantly rebuilds your `.pdf` using local LaTeX tools every time you save a `.tex` file.
