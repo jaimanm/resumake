@@ -75,7 +75,8 @@ module.exports = async function setupCommand() {
         { name: 'Modular Multi-Resume (3 versions)', value: 'modular-multi' },
         { name: 'Standard (Single version)', value: 'standard' },
         { name: 'Awesome-CV (Professional)', value: 'awesome-cv' },
-        { name: "Jake's Resume (Classic)", value: 'jakes-resume' }
+        { name: "Jake's Resume (Classic)", value: 'jakes-resume' },
+        { name: "Jake's CV (Classic + Extended Sections)", value: 'jakes-cv' }
       ]
     },
     {
