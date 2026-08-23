@@ -3,12 +3,14 @@ const setupCommand = require('./commands/setup');
 const devCommand = require('./commands/dev');
 const configCommand = require('./commands/config');
 
+const packageJson = require('../package.json');
+
 const program = new Command();
 
 program
-  .name('resume-env')
+  .name('resumake')
   .description('CLI to automatically setup a magical LaTeX resume environment')
-  .version('1.0.0');
+  .version(packageJson.version);
 
 program
   .command('setup')
