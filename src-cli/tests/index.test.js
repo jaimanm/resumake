@@ -40,6 +40,7 @@ describe('CLI Commands', () => {
         template: 'modular-multi',
         driveFolder: 'MyResumes'
       });
+      inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
       execa.mockResolvedValueOnce({ stdout: 'Logged in' }); // gh auth status
       execa.mockResolvedValueOnce({}); // gh repo create
@@ -54,8 +55,6 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git checkout template/main
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
-
-      inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
       const fakeToken = `{"access_token":"super-secret-token","token_type":"Bearer"}`;
       execa.mockResolvedValueOnce({ 
@@ -87,6 +86,8 @@ describe('CLI Commands', () => {
         template: 'modular-multi',
         driveFolder: 'Resumes'
       });
+      inquirer.prompt.mockResolvedValueOnce({ ready: true });
+
 
       execa.mockResolvedValueOnce({ stdout: 'Logged in' }); // gh auth status
       execa.mockResolvedValueOnce({}); // gh repo create
@@ -95,11 +96,9 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git fetch
       execa.mockResolvedValueOnce({}); // git reset
       fs.existsSync.mockReturnValue(false);
-      execa.mockResolvedValueOnce({}); // git checkout template/main
+      execa.mockResolvedValueOnce({}); // git checkout
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
-
-      inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
       // Simulate rclone failure
       execa.mockRejectedValueOnce(new Error('rclone crashed'));
@@ -147,6 +146,7 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({ stdout: 'rclone v1' });
 
       inquirer.prompt.mockResolvedValueOnce({ targetDir: '..', repoName: 'test', template: 'standard', driveFolder: 'Resumes' });
+      inquirer.prompt.mockResolvedValueOnce({ ready: true });
 
       // Fail GitHub auth
       execa.mockRejectedValueOnce(new Error('auth failed'));

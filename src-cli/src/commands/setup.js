@@ -41,6 +41,11 @@ module.exports = async function setupCommand() {
   await checkDependencies();
 
   const path = require('path');
+
+  // ======================================================================
+  //  PHASE 1: Collect ALL user inputs before doing anything destructive.
+  //  Ctrl+C anywhere in this phase is a clean abort with zero side effects.
+  // ======================================================================
   const answers = await inquirer.prompt([
     {
       type: 'input',
@@ -87,8 +92,21 @@ module.exports = async function setupCommand() {
     }
   ]);
 
+  console.log(chalk.cyan('\nNow, let\'s set up your Google Drive Sync!'));
+  console.log('A browser window will pop open for you to log into Google Drive.');
+  
+  const { ready } = await inquirer.prompt([{
+    type: 'confirm',
+    name: 'ready',
+    message: 'Ready to authenticate?',
+    default: true
+  }]);
+
   const { repoName, template, driveFolder, targetDir } = answers;
 
+  // ======================================================================
+  //  PHASE 2: Execute all side effects. No more prompts from here on out.
+  // ======================================================================
   console.log(chalk.green(`\nAwesome! Setting up ${repoName} using the ${template} template...\n`));
   
   const scaffoldSpinner = ora('Creating GitHub repository and pulling template...').start();
@@ -96,7 +114,6 @@ module.exports = async function setupCommand() {
   try {
     await execa('gh', ['auth', 'status']);
     // Change to target directory before cloning
-    const path = require('path');
     const absoluteTargetDir = path.resolve(targetDir);
     if (!fs.existsSync(absoluteTargetDir)) fs.mkdirSync(absoluteTargetDir, { recursive: true });
     process.chdir(absoluteTargetDir);
@@ -134,16 +151,6 @@ module.exports = async function setupCommand() {
     }
     process.exit(1);
   }
-
-  console.log(chalk.cyan('\nNow, let\'s set up your Google Drive Sync!'));
-  console.log('A browser window will pop open for you to log into Google Drive.');
-  
-  const { ready } = await inquirer.prompt([{
-    type: 'confirm',
-    name: 'ready',
-    message: 'Ready to authenticate?',
-    default: true
-  }]);
 
   if (ready) {
     const driveSpinner = ora('Waiting for Google Drive authentication...').start();
