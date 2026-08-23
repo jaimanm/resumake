@@ -52,7 +52,6 @@ describe('CLI Commands', () => {
       fs.existsSync.mockImplementation((pathStr) => pathStr.includes('build-resume.yml') ? true : false);
       fs.readFileSync.mockReturnValueOnce('... rclone sync PDF_Exports/ gdrive:Resumes/ ...');
       
-      execa.mockResolvedValueOnce({}); // git checkout template/main
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
 
@@ -96,7 +95,6 @@ describe('CLI Commands', () => {
       execa.mockResolvedValueOnce({}); // git fetch
       execa.mockResolvedValueOnce({}); // git reset
       fs.existsSync.mockReturnValue(false);
-      execa.mockResolvedValueOnce({}); // git checkout
       execa.mockResolvedValueOnce({}); // git add
       execa.mockResolvedValueOnce({}); // git commit
 

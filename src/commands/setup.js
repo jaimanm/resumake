@@ -136,12 +136,9 @@ module.exports = async function setupCommand() {
         actionContent = actionContent.replace(/gdrive:Resumes\//g, `gdrive:${driveFolder}/`);
         fs.writeFileSync(actionPath, actionContent);
     }
-
-    // Pull the CLI wrapper back in from the main branch so they can use ./cli dev!
-    await execa('git', ['checkout', 'template/main', '--', 'cli', 'src-cli']);
     
     await execa('git', ['add', '.']);
-    await execa('git', ['commit', '-m', `Scaffold ${template} with CLI tools and custom Drive folder`]);
+    await execa('git', ['commit', '-m', `Scaffold ${template} with custom Drive folder`]);
     scaffoldSpinner.succeed(`Successfully created ${repoName} and scaffolded template!`);
   } catch (err) {
     scaffoldSpinner.fail('Failed to scaffold repository.');
@@ -187,6 +184,6 @@ module.exports = async function setupCommand() {
   console.log(chalk.green(`\n🎉 All done! Your magical resume environment is ready.`));
   console.log(chalk.white(`\nNext steps:`));
   console.log(chalk.cyan(`  cd ${path.join(targetDir, repoName)}`));
-  console.log(chalk.cyan(`  ./cli dev`));
+  console.log(chalk.cyan(`  resumake dev`));
   console.log(chalk.white(`\nTo live-edit your resume!\n`));
 };
