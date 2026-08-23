@@ -4,7 +4,7 @@
   "description": "CLI to scaffold a magical LaTeX resume environment",
   "main": "index.js",
   "bin": {
-    "create-resume-env": "./bin/index.js"
+    "resumake": "./bin/index.js"
   },
   "scripts": {
     "test": "jest"
