@@ -2,6 +2,10 @@
   "name": "@jaimanm/resumake",
   "version": "1.0.1",
   "description": "CLI to scaffold a magical LaTeX resume environment",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaimanm/resumake.git"
+  },
   "main": "index.js",
   "bin": {
     "resumake": "./bin/index.js"
