@@ -1,0 +1,4 @@
+PDF_Exports/
+resume_*_build/
+*.synctex.gz
+.DS_Store

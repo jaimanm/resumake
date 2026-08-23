@@ -20,12 +20,25 @@ To contribute, you must follow these exact steps:
    - `chore/description` for non-functional tasks (docs, CI/CD, etc.)
 
 3. **Write Tests:**
-   If you are contributing to the Node.js CLI logic in `src-cli`, ensure that your logic is fully covered by Jest tests in `src-cli/tests/index.test.js`. Execute `npm test` inside `src-cli` to verify.
+   If you are contributing to the Node.js CLI logic, ensure that your logic is fully covered by Jest tests in the `tests/` directory. Execute `npm test` at the repository root to verify.
 
 4. **Submit a Pull Request:**
    Push your branch and open a Pull Request against `main`. Ensure your PR description links back to the issue it resolves (e.g., "Closes #5").
 
 5. **Wait for CI / Review:**
    The `main` branch is protected. All GitHub Action status checks (such as the `test` workflow) must pass before a merge is permitted.
+
+## Adding New Templates
+
+ResuMake stores all of its available resume templates inside the `templates/` directory. We welcome standard open-source contributions for new templates!
+
+To add a new template to the CLI:
+
+1. **Fork the repository** and create a feature branch off of `main` (e.g., `feat/add-awesome-template`).
+2. Create a new folder inside the `templates/` directory named after your template (e.g., `templates/my-awesome-template/`).
+3. Add all necessary LaTeX files (`.tex`), images, and configuration files into that folder.
+4. You **must** include an executable `build_all.sh` script at the root of your new template folder. This script is responsible for compiling the PDF and placing it into a `PDF_Exports/` folder.
+5. Edit the `src/commands/setup.js` file to add your new template to the `choices` array in the wizard prompt.
+6. Commit your changes and submit a single **Pull Request** targeting the `main` branch.
 
 By following these guidelines, we ensure that the `main` branch remains perfectly stable for end-users relying on our CLI tool!
