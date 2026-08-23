@@ -33,14 +33,17 @@ module.exports = async function configCommand() {
       const driveMatch = actionContent.match(/rclone sync PDF_Exports\/ gdrive:(.*?)\//);
       const currentDriveFolder = driveMatch ? driveMatch[1] : 'Resumes';
 
-      const { driveFolder } = await inquirer.prompt([
+      let { driveFolder } = await inquirer.prompt([
         {
           type: 'input',
           name: 'driveFolder',
-          message: 'What folder in Google Drive should your PDFs sync to?',
+          message: 'What folder in Google Drive should your PDFs sync to? (Leave blank or type / for root)',
           default: currentDriveFolder
         }
       ]);
+
+      // Normalize folder to avoid double slashes if they type /
+      driveFolder = driveFolder.replace(/^\/+|\/+$/g, '').trim();
 
       if (driveFolder === currentDriveFolder) {
         console.log(chalk.green('\nConfiguration is already up to date. No changes made.'));
