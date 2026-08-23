@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set timeout -1
+spawn ./cli setup
+expect "Where would you like to clone your new resume repository locally?"
+send "\r"
+expect "What would you like to name your new private repository?"
+send "cv\r"
+expect "Which resume template would you like to use?"
+send "\033\[B\033\[B\r"
+expect "What folder in Google Drive should your PDFs sync to?"
+send "\r"
+expect "Ready to authenticate?"
+send "Y\r"
+expect eof
