@@ -1,4 +1,4 @@
-# Auto-Resume Template Environment
+# ResuMake
 
 A magical, fully-automated LaTeX resume workflow. Write your resume in LaTeX, and automatically compile it, release it, and sync it to Google Drive every time you push.
 
@@ -12,8 +12,8 @@ A magical, fully-automated LaTeX resume workflow. Write your resume in LaTeX, an
 
 1. Clone this repository to bootstrap your environment:
    ```bash
-   git clone https://github.com/jaimanm/auto-resume-template.git
-   cd auto-resume-template
+   git clone https://github.com/jaimanm/resumake.git
+   cd resumake
    ```
 2. Run the interactive setup wizard:
    ```bash
