@@ -30,13 +30,15 @@ To contribute, you must follow these exact steps:
 
 ## Adding New Templates
 
-ResuMake leverages Git branches to store different resume templates. To add a new template to the CLI:
+ResuMake stores all of its available resume templates inside the `templates/` directory. We welcome standard open-source contributions for new templates!
 
-1. Create a new orphan branch named after your template (e.g., `template/my-awesome-template`).
-2. Add all necessary LaTeX files (`.tex`), images, and configuration files to this branch.
-3. You **must** include an executable `build_all.sh` script at the root of the branch. This script is responsible for compiling the PDF and placing it into a `PDF_Exports/` folder.
-4. Push your template branch to the remote repository.
-5. Switch back to the `main` branch, and edit the `src/commands/setup.js` file to add your new template to the `choices` array in the wizard prompt.
-6. Submit a Pull Request targeting `main` with your `setup.js` changes.
+To add a new template to the CLI:
+
+1. **Fork the repository** and create a feature branch off of `main` (e.g., `feat/add-awesome-template`).
+2. Create a new folder inside the `templates/` directory named after your template (e.g., `templates/my-awesome-template/`).
+3. Add all necessary LaTeX files (`.tex`), images, and configuration files into that folder.
+4. You **must** include an executable `build_all.sh` script at the root of your new template folder. This script is responsible for compiling the PDF and placing it into a `PDF_Exports/` folder.
+5. Edit the `src/commands/setup.js` file to add your new template to the `choices` array in the wizard prompt.
+6. Commit your changes and submit a single **Pull Request** targeting the `main` branch.
 
 By following these guidelines, we ensure that the `main` branch remains perfectly stable for end-users relying on our CLI tool!
