@@ -78,7 +78,6 @@ module.exports = async function setupCommand() {
       message: 'Which resume template would you like to use?',
       choices: [
         { name: 'Modular Multi-Resume (3 versions)', value: 'modular-multi' },
-        { name: 'Standard (Single version)', value: 'standard' },
         { name: 'Awesome-CV (Professional)', value: 'awesome-cv' },
         { name: "Jake's Resume (Classic)", value: 'jakes-resume' },
         { name: "Jake's CV (Classic + Extended Sections)", value: 'jakes-cv' }
@@ -125,9 +124,12 @@ module.exports = async function setupCommand() {
     const urlResult = await execa('git', ['config', '--get', 'remote.origin.url']);
     remoteUrl = urlResult.stdout.trim();
 
-    await execa('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/resumake.git']);
-    await execa('git', ['fetch', 'template']);
-    await execa('git', ['reset', '--hard', `template/template/${template}`]);
+    // Copy template files locally from the NPM package
+    const templatePath = path.resolve(__dirname, '../../templates', template);
+    if (!fs.existsSync(templatePath)) {
+      throw new Error(`Template "${template}" not found locally at ${templatePath}`);
+    }
+    fs.cpSync(templatePath, process.cwd(), { recursive: true });
     
     // Customize the GitHub action with the user's preferred Google Drive folder
     const actionPath = '.github/workflows/build-resume.yml';

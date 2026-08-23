@@ -33,7 +33,7 @@ describe('resumake setup command', () => {
         return Promise.resolve({
           targetDir: '/mock/path',
           repoName: 'my-resume',
-          template: 'standard',
+          template: 'awesome-cv',
           driveFolder: 'Resumes'
         });
       }
@@ -47,6 +47,7 @@ describe('resumake setup command', () => {
     fs.existsSync.mockReturnValue(true);
     fs.readFileSync.mockReturnValue('gdrive:Resumes/');
     fs.writeFileSync.mockReturnValue(true);
+    fs.cpSync = jest.fn();
     
     // Spy on process.chdir to avoid changing test runner directory
     jest.spyOn(process, 'chdir').mockImplementation(() => {});
@@ -65,9 +66,12 @@ describe('resumake setup command', () => {
     // Verify gh repo create was called
     expect(execa).toHaveBeenCalledWith('gh', ['repo', 'create', 'my-resume', '--private', '--clone']);
     
-    // Verify template was fetched
-    expect(execa).toHaveBeenCalledWith('git', ['remote', 'add', 'template', 'https://github.com/jaimanm/resumake.git']);
-    expect(execa).toHaveBeenCalledWith('git', ['reset', '--hard', 'template/template/standard']);
+    // Verify template was copied locally
+    expect(fs.cpSync).toHaveBeenCalledWith(
+      expect.stringContaining('templates/awesome-cv'),
+      expect.any(String),
+      { recursive: true }
+    );
     
     // Verify rclone was executed
     expect(execa).toHaveBeenCalledWith('rclone', ['authorize', 'drive']);

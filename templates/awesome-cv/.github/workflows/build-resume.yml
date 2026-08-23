@@ -1,0 +1,65 @@
+name: Build, Sync, and Release Official PDFs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LaTeX environment (Cached)
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science latexmk
+          version: 1.0
+
+      - name: Build Official PDFs
+        run: |
+          chmod +x build_all.sh
+          ./build_all.sh
+
+      # ---------------------------------------------------------
+      # STEP 1: SYNC TO GOOGLE DRIVE (FINDER)
+      # ---------------------------------------------------------
+      - name: Install and Configure rclone
+        run: |
+          sudo apt-get install -y rclone
+          mkdir -p ~/.config/rclone
+          echo '${{ secrets.RCLONE_CONF }}' > ~/.config/rclone/rclone.conf
+
+      - name: Sync to Google Drive
+        run: |
+          # The sync command makes the Google Drive 'Resumes' folder exactly match the local PDF_Exports folder
+          # It will delete files in the drive that are not in PDF_Exports
+          rclone sync PDF_Exports/ gdrive:Resumes/
+
+      # ---------------------------------------------------------
+      # STEP 2: HISTORICAL RELEASE (ZIP)
+      # ---------------------------------------------------------
+      - name: Generate Release Version
+        id: version
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "tag=${DATE}_v${{ github.run_number }}" >> $GITHUB_OUTPUT
+          echo "name=Release ${DATE} (Build ${{ github.run_number }})" >> $GITHUB_OUTPUT
+
+      - name: Zip for Release
+        run: zip -r Official_Resumes.zip PDF_Exports/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.name }}
+          files: Official_Resumes.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

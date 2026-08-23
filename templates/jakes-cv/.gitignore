@@ -1,0 +1,9 @@
+cv_build/
+PDF_Exports/
+.DS_Store
+*.log
+*.aux
+*.fls
+*.fdb_latexmk
+*.out
+*.synctex.gz
