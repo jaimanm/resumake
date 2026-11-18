@@ -32,8 +32,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install LaTeX
         run: |
+          sudo sed -i -E 's|http://[^ /]*archive.ubuntu.com/ubuntu/?|https://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science texlive-xetex latexmk
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science texlive-xetex latexmk
           sudo fmtutil-sys --byfmt pdflatex
           sudo fmtutil-sys --byfmt xelatex
       - name: Build every template

@@ -22,8 +22,9 @@ jobs:
       # Package configuration scripts generate the required TeX formats.
       - name: Install LaTeX environment
         run: |
+          sudo sed -i -E 's|http://[^ /]*archive.ubuntu.com/ubuntu/?|https://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science latexmk rclone texlive-xetex texlive-fonts-extra
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science latexmk rclone texlive-xetex texlive-fonts-extra
           sudo fmtutil-sys --byfmt pdflatex
           sudo fmtutil-sys --byfmt xelatex
 
