@@ -27,6 +27,8 @@ jobs:
         run: npm test
 
   template-builds:
+    # Compile templates once per PR; branch pushes already run the CLI tests.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
