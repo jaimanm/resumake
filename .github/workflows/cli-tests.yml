@@ -25,3 +25,22 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+
+  template-builds:
+    # Compile templates once per PR; branch pushes already run the CLI tests.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LaTeX
+        run: |
+          sudo sed -i -E 's|http://[^ /]*archive.ubuntu.com/ubuntu/?|https://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get update
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science texlive-xetex latexmk
+          sudo fmtutil-sys --byfmt pdflatex
+          sudo fmtutil-sys --byfmt xelatex
+      - name: Build every template
+        run: |
+          for template in templates/*; do
+            bash "$template/build_all.sh"
+          done

@@ -30,7 +30,7 @@ module.exports = async function configCommand() {
       }
 
       let actionContent = fs.readFileSync(actionPath, 'utf8');
-      const driveMatch = actionContent.match(/rclone sync PDF_Exports\/ gdrive:(.*?)\//);
+      const driveMatch = actionContent.match(/rclone (?:sync|copy) PDF_Exports\/ gdrive:([^\s]*)\//);
       const currentDriveFolder = driveMatch ? driveMatch[1] : 'Resumes';
 
       let { driveFolder } = await inquirer.prompt([
@@ -51,8 +51,8 @@ module.exports = async function configCommand() {
       }
 
       spinner.start('Updating configuration and syncing to GitHub...');
-      actionContent = actionContent.replace(new RegExp(`gdrive:${currentDriveFolder}\/`, 'g'), `gdrive:${driveFolder}/`);
-      actionContent = actionContent.replace(new RegExp(`Google Drive '${currentDriveFolder}' folder`, 'g'), `Google Drive '${driveFolder}' folder`);
+      actionContent = actionContent.split(`gdrive:${currentDriveFolder}/`).join(`gdrive:${driveFolder}/`);
+      actionContent = actionContent.split(`Google Drive '${currentDriveFolder}' folder`).join(`Google Drive '${driveFolder}' folder`);
       fs.writeFileSync(actionPath, actionContent);
       
       await execa('git', ['add', actionPath]);
