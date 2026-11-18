@@ -1,22 +1,33 @@
 #!/bin/bash
+set -euo pipefail
 
-# Remove existing PDF export directories to ensure a clean build
-rm -rf PDF_Exports
+cd "$(dirname "$0")"
 
-mkdir -p PDF_Exports
+# Keep previous exports until the replacement PDF has built successfully.
+build_dir=$(mktemp -d "${TMPDIR:-/tmp}/resume-build.XXXXXX")
+trap 'rm -rf "$build_dir"' EXIT
 
-# Dynamically extract first and last name from cv.tex
 FIRST=$(grep '\\newcommand{\\firstname}' cv.tex | grep -o '{[^}]*}$' | tr -d '{}')
 LAST=$(grep '\\newcommand{\\lastname}' cv.tex | grep -o '{[^}]*}$' | tr -d '{}')
 JOBNAME="${FIRST}_${LAST}_CV"
 
-echo "Building ${FIRST} ${LAST}'s CV..."
-latexmk -pdf -interaction=nonstopmode -halt-on-error -jobname="$JOBNAME" -output-directory="PDF_Exports" cv.tex
+echo "Building PDF..."
+latexmk -pdf -interaction=nonstopmode -halt-on-error -jobname="$JOBNAME" -output-directory="$build_dir" cv.tex
 
-# Clean up auxiliary build files
-find PDF_Exports -type f ! -name "*.pdf" -delete
+shopt -s nullglob
+pdfs=("$build_dir"/*.pdf)
+if [[ ${#pdfs[@]} -ne 1 ]]; then
+    echo "Expected exactly one generated PDF." >&2
+    exit 1
+fi
+pdf="${pdfs[0]}"
+if [[ ! -s "$pdf" ]] || [[ "$(head -c 5 "$pdf")" != "%PDF-" ]]; then
+    echo "Missing or invalid PDF: $pdf" >&2
+    exit 1
+fi
 
-echo "Done! Your PDFs are organized in the PDF_Exports directory."
+find "$build_dir" -type f ! -name '*.pdf' -delete
+rm -rf PDF_Exports
+mv "$build_dir" PDF_Exports
 
-# Clean up auxiliary build folders to keep the workspace clean
-rm -rf cv_build
+echo "Built and verified the PDF in PDF_Exports."

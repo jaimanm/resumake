@@ -4,23 +4,27 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install LaTeX environment (Cached)
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-science latexmk
-          version: 1.0
+      # Package configuration scripts generate the required TeX formats.
+      - name: Install LaTeX environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science latexmk rclone
+          sudo fmtutil-sys --byfmt pdflatex
 
       - name: Build Official PDFs
         run: |
@@ -31,21 +35,32 @@ jobs:
       # STEP 1: SYNC TO GOOGLE DRIVE (FINDER)
       # ---------------------------------------------------------
       - name: Install and Configure rclone
+        if: github.event_name == 'push'
         run: |
-          sudo apt-get install -y rclone
           mkdir -p ~/.config/rclone
-          echo '${{ secrets.RCLONE_CONF }}' > ~/.config/rclone/rclone.conf
+          printf '%s\n' "$RCLONE_CONF" > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
 
-      - name: Sync to Google Drive
+      - name: Verify and upload PDFs to Google Drive
+        if: github.event_name == 'push'
         run: |
-          # The sync command makes the Google Drive 'Resumes' folder exactly match the local PDF_Exports folder
-          # It will delete files in the drive that are not in PDF_Exports
-          rclone sync PDF_Exports/ gdrive:Resumes/
+          test "$(find PDF_Exports -type f -name '*.pdf' | wc -l)" -eq 1
+          find PDF_Exports -type f -name '*.pdf' | while IFS= read -r pdf; do
+            test -s "$pdf"
+            test "$(head -c 5 "$pdf")" = '%PDF-'
+          done
+
+          # Update PDFs without deleting existing destination files.
+          rclone copy PDF_Exports/ gdrive:Resumes/ --checksum --verbose
+          rclone check PDF_Exports/ gdrive:Resumes/ --one-way
 
       # ---------------------------------------------------------
       # STEP 2: HISTORICAL RELEASE (ZIP)
       # ---------------------------------------------------------
       - name: Generate Release Version
+        if: github.event_name == 'push'
         id: version
         run: |
           DATE=$(date +'%Y-%m-%d')
@@ -53,9 +68,11 @@ jobs:
           echo "name=Release ${DATE} (Build ${{ github.run_number }})" >> $GITHUB_OUTPUT
 
       - name: Zip for Release
+        if: github.event_name == 'push'
         run: zip -r Official_Resumes.zip PDF_Exports/
 
       - name: Create GitHub Release
+        if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}

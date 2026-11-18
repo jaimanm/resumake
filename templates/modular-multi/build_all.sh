@@ -1,23 +1,43 @@
 #!/bin/bash
+set -euo pipefail
 
-# Create identifying output directories
-mkdir -p PDF_Exports/Backend
-mkdir -p PDF_Exports/AIML
-mkdir -p PDF_Exports/Quantum
+cd "$(dirname "$0")"
 
-echo "Building Backend Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/Backend" resume_backend.tex
+# Keep the previous exports until every replacement PDF has built successfully.
+build_dir=$(mktemp -d "${TMPDIR:-/tmp}/resume-build.XXXXXX")
+trap 'rm -rf "$build_dir"' EXIT
 
-echo "Building AI/ML Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/AIML" resume_aiml.tex
+build_resume() {
+    local variant="$1"
+    local folder="$2"
+    local output="$build_dir/$folder"
+    mkdir -p "$output"
+    echo "Building $folder Resume..."
+    latexmk -pdf -interaction=nonstopmode -halt-on-error \
+        -jobname="Jaiman_Munshi_Resume" -output-directory="$output" \
+        "resume_${variant}.tex"
 
-echo "Building Quantum Resume..."
-latexmk -pdf -jobname="Jaiman_Munshi_Resume" -output-directory="PDF_Exports/Quantum" resume_quantum.tex
+    local pdfs
+    shopt -s nullglob
+    pdfs=("$output"/*.pdf)
+    if [[ ${#pdfs[@]} -ne 1 ]]; then
+        echo "Expected exactly one PDF for $folder." >&2
+        exit 1
+    fi
+    local pdf="${pdfs[0]}"
+    if [[ ! -s "$pdf" ]] || [[ "$(head -c 5 "$pdf")" != "%PDF-" ]]; then
+        echo "Missing or invalid PDF: $pdf" >&2
+        exit 1
+    fi
+}
 
-# Clean up all LaTeX auxiliary files, leaving ONLY the PDFs in the export directories
-find PDF_Exports -type f ! -name "*.pdf" -delete
+build_resume backend Backend
+build_resume aiml AIML
+build_resume quantum Quantum
 
-echo "Done! Your beautifully named PDFs are organized in the PDF_Exports directory."
+# Publish only validated PDFs after all three builds have passed.
+find "$build_dir" -type f ! -name '*.pdf' -delete
+rm -rf PDF_Exports
+mv "$build_dir" PDF_Exports
 
-# Clean up auxiliary build folders to keep the workspace clean
-rm -rf resume_*_build
+echo "Built and verified all three resume PDFs in PDF_Exports."
